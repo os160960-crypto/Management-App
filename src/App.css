@@ -1,0 +1,118 @@
+.App {
+  width: 100%;
+}
+
+.todo-container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: #667eea;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+form input {
+  flex: 1;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+form input:focus {
+  border-color: #667eea;
+}
+
+form button {
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+form button:active {
+  transform: translateY(0);
+}
+
+.todo-list {
+  list-style: none;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.todo-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.todo-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.todo-item span {
+  flex: 1;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.todo-item span.completed {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.todo-item button {
+  padding: 8px 15px;
+  font-size: 14px;
+  color: white;
+  background: #ff6b6b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.todo-item button:hover {
+  background: #ff5252;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 18px;
+}
+
