@@ -222,5 +222,5 @@ firebase deploy
 
 ## 도움말
 
-더 자세한 내용은 [Firebase 공식 문서](https://firebase.google.com/docs)를 참조하세요.
+더 자세한 내용은 [Firebase 공식 문서](https://firebase.google.com/docs)를 참고하세요.
 
