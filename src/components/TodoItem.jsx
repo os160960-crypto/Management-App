@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TodoItem({ todo, onToggle, onDelete }) {
+function TodoItem({ todo, onToggle, onDelete, members = [], currentUser }) {
   const getDateDisplay = (dateType) => {
     const today = new Date();
     const tomorrow = new Date(today);
@@ -24,6 +24,14 @@ function TodoItem({ todo, onToggle, onDelete }) {
     }
   };
 
+  const getAssignedUser = (assignedTo) => {
+    if (!assignedTo) return null;
+    return members.find(member => member.uid === assignedTo);
+  };
+
+  const assignedUser = getAssignedUser(todo.assignedTo);
+  const createdByUser = members.find(member => member.uid === todo.createdBy);
+
   return (
     <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
       <input 
@@ -34,7 +42,19 @@ function TodoItem({ todo, onToggle, onDelete }) {
       <div className="todo-content">
         <div className="todo-title">{todo.title}</div>
         {todo.description && <div className="todo-description">{todo.description}</div>}
-        <div className="todo-date">{getDateDisplay(todo.date)}</div>
+        <div className="todo-meta">
+          <div className="todo-date">{getDateDisplay(todo.date)}</div>
+          {assignedUser && (
+            <div className="todo-assigned">
+              👤 {assignedUser.displayName || assignedUser.email}
+            </div>
+          )}
+          {createdByUser && todo.createdBy !== currentUser?.uid && (
+            <div className="todo-created-by">
+              📝 {createdByUser.displayName || createdByUser.email}
+            </div>
+          )}
+        </div>
       </div>
       <button 
         className="delete-button"

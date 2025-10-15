@@ -218,10 +218,33 @@
   line-height: 1.4;
 }
 
+.todo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .todo-date {
   font-size: 12px;
   color: #90caf9;
   font-weight: 500;
+}
+
+.todo-assigned,
+.todo-created-by {
+  font-size: 11px;
+  color: #9aa0a6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.todo-assigned {
+  color: #81c784;
+}
+
+.todo-created-by {
+  color: #ffb74d;
 }
 
 .todo-item.completed .todo-title {

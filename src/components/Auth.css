@@ -4,17 +4,12 @@
   justify-content: center;
   align-items: center;
   background: #0a0a0a;
-  padding: 20px;
+  padding: 40px;
 }
 
 .auth-box {
-  background: #1a1a1a;
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid #2a2a2a;
-  max-width: 450px;
   width: 100%;
+  max-width: 500px;
   animation: slideUp 0.3s ease-out;
 }
 
@@ -31,19 +26,19 @@
 
 .auth-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .auth-header h1 {
-  font-size: 28px;
+  font-size: 36px;
   color: #ffffff;
-  margin: 0 0 10px 0;
+  margin: 0 0 15px 0;
   font-weight: 600;
   letter-spacing: -0.5px;
 }
 
 .auth-header p {
-  font-size: 16px;
+  font-size: 18px;
   color: #9aa0a6;
   margin: 0;
 }
@@ -104,28 +99,35 @@
 
 .social-btn {
   width: 100%;
-  padding: 14px 20px;
+  padding: 18px 24px;
   border: none;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 12px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   color: white;
 }
 
 .social-icon {
-  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .google-btn {
   background: #ffffff;
   color: #333;
   border: 1px solid #e0e0e0;
+}
+
+.google-btn .social-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .google-btn:hover {
@@ -138,6 +140,11 @@
   border: 1px solid #1877f2;
 }
 
+.facebook-btn .social-icon {
+  width: 24px;
+  height: 24px;
+}
+
 .facebook-btn:hover {
   background: #166fe5;
   border-color: #166fe5;
@@ -146,6 +153,11 @@
 .apple-btn {
   background: #000000;
   border: 1px solid #333;
+}
+
+.apple-btn .social-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .apple-btn:hover {
@@ -167,12 +179,12 @@
 
 .auth-input {
   width: 100%;
-  padding: 14px 16px;
+  padding: 18px 20px;
   border: 1px solid #444;
   background: #252525;
   color: white;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 12px;
+  font-size: 16px;
   transition: all 0.2s;
   box-sizing: border-box;
 }
@@ -189,16 +201,16 @@
 
 .submit-btn {
   width: 100%;
-  padding: 14px 20px;
+  padding: 18px 24px;
   border: 1px solid #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #ffffff;
   color: #1a1a1a;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .submit-btn:hover:not(:disabled) {
@@ -238,9 +250,6 @@
 
 /* 모바일 반응형 */
 @media (max-width: 480px) {
-  .auth-box {
-    padding: 30px 24px;
-  }
 
   .auth-header h1 {
     font-size: 28px;

@@ -1,7 +1,7 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 
-function TodoList({ todos, onToggle, onDelete }) {
+function TodoList({ todos, onToggle, onDelete, members = [], currentUser }) {
   if (todos.length === 0) {
     return (
       <div className="empty-state">
@@ -19,7 +19,9 @@ function TodoList({ todos, onToggle, onDelete }) {
           key={todo.id} 
           todo={todo} 
           onToggle={onToggle} 
-          onDelete={onDelete} 
+          onDelete={onDelete}
+          members={members}
+          currentUser={currentUser}
         />
       ))}
     </ul>

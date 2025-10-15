@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import CustomCalendar from './CustomCalendar';
 
-function TodoInput({ onAdd }) {
+function TodoInput({ onAdd, members = [] }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedDate, setSelectedDate] = useState('today');
   const [customDate, setCustomDate] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
+  const [assignedTo, setAssignedTo] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +21,8 @@ function TodoInput({ onAdd }) {
     const todoData = {
       title: title.trim(),
       description: description.trim(),
-      date: finalDate
+      date: finalDate,
+      assignedTo: assignedTo || null
     };
     
     onAdd(todoData);
@@ -29,6 +31,7 @@ function TodoInput({ onAdd }) {
     setSelectedDate('today');
     setCustomDate('');
     setShowCalendar(false);
+    setAssignedTo('');
   };
 
   const handleDateSelect = (dateType) => {
@@ -88,6 +91,22 @@ function TodoInput({ onAdd }) {
           placeholder="세부사항 추가" 
         />
       </div>
+      {members.length > 0 && (
+        <div className="form-row">
+          <select 
+            className="form-input"
+            value={assignedTo} 
+            onChange={(e) => setAssignedTo(e.target.value)}
+          >
+            <option value="">담당자 선택 (선택사항)</option>
+            {members.map(member => (
+              <option key={member.uid} value={member.uid}>
+                {member.displayName || member.email}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <div className="form-row">
         <div className="date-selector">
           <button 
