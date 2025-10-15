@@ -31,6 +31,11 @@ function CustomCalendar({ selectedDate, onDateSelect, onClose }) {
       days.push(day);
     }
     
+    // 항상 6주(42개 셀)로 고정하기 위해 나머지를 빈 칸으로 채움
+    while (days.length < 42) {
+      days.push(null);
+    }
+    
     return days;
   };
   

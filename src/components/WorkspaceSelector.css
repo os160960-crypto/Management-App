@@ -1,0 +1,287 @@
+.workspace-selector {
+  min-height: 100vh;
+  background: #121212;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.workspace-selector-header {
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.workspace-selector-header h2 {
+  font-size: 32px;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+}
+
+.workspace-selector-header p {
+  font-size: 16px;
+  color: #9aa0a6;
+  margin: 0;
+}
+
+.workspace-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.workspace-card {
+  background: #1e1e1e;
+  border: 2px solid #333;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.workspace-card:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+.workspace-icon {
+  font-size: 40px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.workspace-info {
+  flex: 1;
+}
+
+.workspace-info h3 {
+  font-size: 20px;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  font-weight: 600;
+}
+
+.workspace-info p {
+  font-size: 14px;
+  color: #9aa0a6;
+  margin: 0;
+}
+
+.workspace-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.action-btn span {
+  font-size: 20px;
+}
+
+.create-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.join-btn {
+  background: #2a2a2a;
+  color: white;
+  border: 2px solid #444;
+}
+
+.join-btn:hover {
+  background: #333;
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+/* 모달 스타일 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: #1e1e1e;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 450px;
+  width: 90%;
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content h3 {
+  font-size: 24px;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.modal-description {
+  font-size: 14px;
+  color: #9aa0a6;
+  margin: 0 0 20px 0;
+}
+
+.modal-error {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid #f44336;
+  color: #f44336;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #333;
+  background: #2a2a2a;
+  color: white;
+  border-radius: 10px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: #333;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background: #333;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #444;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .workspace-selector {
+    padding: 20px;
+  }
+
+  .workspace-selector-header h2 {
+    font-size: 24px;
+  }
+
+  .workspace-list {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .modal-content {
+    padding: 24px;
+  }
+}
+

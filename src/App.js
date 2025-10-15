@@ -1,57 +1,225 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoInput from './components/TodoInput';
 import TodoList from './components/TodoList';
+import Auth from './components/Auth';
+import WorkspaceSelector from './components/WorkspaceSelector';
+import WorkspaceManager from './components/WorkspaceManager';
 import './App.css';
+import { onAuthStateChange, logout } from './firebase/authService';
+import {
+  createTodo,
+  subscribeToWorkspaceTodos,
+  toggleTodoComplete,
+  deleteTodo as deleteTodoFromFirebase,
+  updateTodo
+} from './firebase/todoService';
+import { getWorkspaceMembers } from './firebase/workspaceService';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [workspace, setWorkspace] = useState(null);
   const [todos, setTodos] = useState([]);
+  const [showWorkspaceManager, setShowWorkspaceManager] = useState(false);
+  const [workspaceMembers, setWorkspaceMembers] = useState([]);
+  const [showMenu, setShowMenu] = useState(false);
 
-  const addTodo = (todoData) => {
-    const newTodo = {
-      id: Date.now(),
-      title: todoData.title,
-      description: todoData.description,
-      date: todoData.date,
-      completed: false
-    };
-    setTodos([...todos, newTodo]);
+  // 인증 상태 감지
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((user) => {
+      setUser(user);
+      setLoading(false);
+      if (!user) {
+        setWorkspace(null);
+        setTodos([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // 워크스페이스 선택 시 Todo 실시간 구독
+  useEffect(() => {
+    if (!workspace) return;
+
+    const unsubscribe = subscribeToWorkspaceTodos(workspace.id, (todos) => {
+      setTodos(todos);
+    });
+
+    loadWorkspaceMembers();
+
+    return () => unsubscribe();
+  }, [workspace]);
+
+  const loadWorkspaceMembers = async () => {
+    if (!workspace) return;
+    const result = await getWorkspaceMembers(workspace.id);
+    if (result.success) {
+      setWorkspaceMembers(result.members);
+    }
   };
 
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
+  const handleAuthSuccess = (user) => {
+    setUser(user);
   };
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const handleWorkspaceSelect = (selectedWorkspace) => {
+    setWorkspace(selectedWorkspace);
   };
 
+  const handleLogout = async () => {
+    const result = await logout();
+    if (result.success) {
+      setUser(null);
+      setWorkspace(null);
+      setTodos([]);
+    }
+  };
+
+  const handleAddTodo = async (todoData) => {
+    if (!workspace || !user) return;
+
+    const result = await createTodo(workspace.id, {
+      text: `${todoData.title}${todoData.description ? ' - ' + todoData.description : ''}`,
+      dueDate: todoData.date,
+      createdBy: user.uid,
+      assignedTo: todoData.assignedTo || null
+    });
+
+    if (!result.success) {
+      alert('할 일 추가에 실패했습니다.');
+    }
+  };
+
+  const handleToggleTodo = async (id) => {
+    const todo = todos.find(t => t.id === id);
+    if (!todo) return;
+
+    await toggleTodoComplete(id, !todo.completed);
+  };
+
+  const handleDeleteTodo = async (id) => {
+    await deleteTodoFromFirebase(id);
+  };
+
+  const handleWorkspaceLeave = () => {
+    setWorkspace(null);
+    setShowWorkspaceManager(false);
+  };
+
+  const handleChangeWorkspace = () => {
+    setWorkspace(null);
+    setShowMenu(false);
+  };
+
+  // 로딩 중
+  if (loading) {
+    return (
+      <div className="App loading-screen">
+        <div className="loading-spinner">⏳</div>
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
+
+  // 미인증 상태 - 로그인 화면
+  if (!user) {
+    return <Auth onAuthSuccess={handleAuthSuccess} />;
+  }
+
+  // 워크스페이스 미선택 - 워크스페이스 선택 화면
+  if (!workspace) {
+    return (
+      <WorkspaceSelector
+        user={user}
+        onWorkspaceSelect={handleWorkspaceSelect}
+      />
+    );
+  }
+
+  // 메인 Todo 앱 화면
   return (
     <div className="App">
       <header className="app-header">
         <div className="header-content">
           <div className="header-left">
-            <a href="#" className="logo">Schedule</a>
-            <button className="hamburger-menu">☰</button>
+            <div className="logo">
+              👥 {workspace.name}
+            </div>
+            <button 
+              className="hamburger-menu"
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              ☰
+            </button>
+            {showMenu && (
+              <div className="dropdown-menu">
+                <button onClick={() => {
+                  setShowWorkspaceManager(true);
+                  setShowMenu(false);
+                }}>
+                  ⚙️ 워크스페이스 설정
+                </button>
+                <button onClick={handleChangeWorkspace}>
+                  🔄 워크스페이스 변경
+                </button>
+                <button onClick={handleLogout}>
+                  🚪 로그아웃
+                </button>
+              </div>
+            )}
           </div>
           <div className="header-right">
-            <button className="create-button">만들기</button>
+            <div className="user-info">
+              {user.photoURL ? (
+                <img src={user.photoURL} alt="프로필" className="user-avatar" />
+              ) : (
+                <div className="user-avatar-placeholder">
+                  {user.displayName?.charAt(0) || '👤'}
+                </div>
+              )}
+              <span className="user-name">{user.displayName || user.email}</span>
+            </div>
           </div>
         </div>
       </header>
       
       <main className="main-content">
         <div className="todo-container">
-          <div className="list-title">내 할 일 목록</div>
-          <TodoInput onAdd={addTodo} />
+          <div className="list-title">
+            📋 할 일 목록
+            <span className="todo-count">({todos.length}개)</span>
+          </div>
+          <TodoInput 
+            onAdd={handleAddTodo}
+            members={workspaceMembers}
+          />
           <TodoList 
-            todos={todos} 
-            onToggle={toggleTodo} 
-            onDelete={deleteTodo} 
+            todos={todos.map(todo => ({
+              id: todo.id,
+              title: todo.text,
+              description: '',
+              date: todo.dueDate,
+              completed: todo.completed,
+              assignedTo: todo.assignedTo,
+              createdBy: todo.createdBy
+            }))}
+            onToggle={handleToggleTodo} 
+            onDelete={handleDeleteTodo}
+            members={workspaceMembers}
+            currentUser={user}
           />
         </div>
       </main>
+
+      {showWorkspaceManager && (
+        <WorkspaceManager
+          workspace={workspace}
+          currentUser={user}
+          onClose={() => setShowWorkspaceManager(false)}
+          onLeave={handleWorkspaceLeave}
+        />
+      )}
     </div>
   );
 }
