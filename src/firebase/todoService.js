@@ -17,10 +17,20 @@ import { db } from './config';
 // Todo 생성
 export const createTodo = async (workspaceId, todoData) => {
   try {
+    console.log('createTodo 호출됨:', { workspaceId, todoData });
+    
+    if (!workspaceId) {
+      throw new Error('워크스페이스 ID가 필요합니다');
+    }
+    
+    if (!todoData.text) {
+      throw new Error('할 일 내용이 필요합니다');
+    }
+
     const todoRef = doc(collection(db, 'todos'));
     const todoId = todoRef.id;
 
-    await setDoc(todoRef, {
+    const todoDoc = {
       id: todoId,
       workspaceId,
       text: todoData.text,
@@ -30,11 +40,21 @@ export const createTodo = async (workspaceId, todoData) => {
       createdBy: todoData.createdBy,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
-    });
+    };
 
+    console.log('Firestore에 저장할 데이터:', todoDoc);
+
+    await setDoc(todoRef, todoDoc);
+
+    console.log('Todo가 성공적으로 저장되었습니다:', todoId);
     return { success: true, todoId };
   } catch (error) {
     console.error('Todo 생성 오류:', error);
+    console.error('오류 상세:', {
+      code: error.code,
+      message: error.message,
+      stack: error.stack
+    });
     return { success: false, error: error.message };
   }
 };

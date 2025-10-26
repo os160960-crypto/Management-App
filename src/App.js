@@ -77,17 +77,36 @@ function App() {
   };
 
   const handleAddTodo = async (todoData) => {
-    if (!workspace || !user) return;
+    if (!workspace || !user) {
+      console.error('워크스페이스 또는 사용자 정보가 없습니다:', { workspace, user });
+      return;
+    }
 
-    const result = await createTodo(workspace.id, {
-      text: `${todoData.title}${todoData.description ? ' - ' + todoData.description : ''}`,
-      dueDate: todoData.date,
-      createdBy: user.uid,
-      assignedTo: todoData.assignedTo || null
-    });
+    console.log('할 일 추가 시도:', todoData);
+    console.log('현재 워크스페이스:', workspace);
+    console.log('현재 사용자:', user);
 
-    if (!result.success) {
-      alert('할 일 추가에 실패했습니다.');
+    try {
+      const result = await createTodo(workspace.id, {
+        text: `${todoData.title}${todoData.description ? ' - ' + todoData.description : ''}`,
+        dueDate: todoData.date,
+        createdBy: user.uid,
+        assignedTo: todoData.assignedTo || null
+      });
+
+      console.log('할 일 추가 결과:', result);
+
+      if (!result.success) {
+        alert('할 일 추가에 실패했습니다: ' + result.error);
+        console.error('할 일 추가 실패:', result.error);
+      } else {
+        console.log('할 일이 성공적으로 추가되었습니다!');
+        // 성공 메시지 표시
+        alert('할 일이 추가되었습니다!');
+      }
+    } catch (error) {
+      console.error('할 일 추가 중 예외 발생:', error);
+      alert('할 일 추가 중 오류가 발생했습니다: ' + error.message);
     }
   };
 
@@ -172,12 +191,22 @@ function App() {
           <div className="header-right">
             <div className="user-info">
               {user.photoURL ? (
-                <img src={user.photoURL} alt="프로필" className="user-avatar" />
-              ) : (
-                <div className="user-avatar-placeholder">
-                  {user.displayName?.charAt(0) || '👤'}
-                </div>
-              )}
+                <img 
+                  src={user.photoURL} 
+                  alt="프로필" 
+                  className="user-avatar"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div 
+                className="user-avatar-placeholder"
+                style={{ display: user.photoURL ? 'none' : 'flex' }}
+              >
+                {user.displayName?.charAt(0) || user.email?.charAt(0) || '👤'}
+              </div>
               <span className="user-name">{user.displayName || user.email}</span>
             </div>
           </div>
